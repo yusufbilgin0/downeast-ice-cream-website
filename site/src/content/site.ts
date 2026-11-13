@@ -13,7 +13,7 @@ export const site = {
   phone: { display: "(207) 315-6670", href: "tel:+12073156670" },
   social: {
     facebook: "https://www.facebook.com/downeasticecream",
-    instagram: "https://www.instagram.com/downeasticecreamfactory",
+    instagram: "https://www.instagram.com/icecreamfactoryboothbayharbor/",
   },
   description:
     "Super premium, old-fashioned hard ice cream handcrafted in small batches in Boothbay Harbor, Maine since 1979. 65+ homemade flavors at two shops: on Pier 1 and at the Meadow Mall Factory Shop.",
