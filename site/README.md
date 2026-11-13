@@ -105,3 +105,13 @@ Earlier art-direction work: a private Spline file (link in `previews/NOTES.md`) 
 - The official logo file (SVG or high-res PNG). The scoop mark in the header is a placeholder brand mark.
 - Real photos (shops, Factory, cones) for the Story page and social sharing.
 - Email address for form inquiries, plus approval to set up Resend (free tier).
+
+## Deployment (Vercel)
+
+- Live preview: https://downeast-ice-cream-website.vercel.app (Vercel project `downeast-ice-cream-website`).
+- **Automatic:** every push to `main` on GitHub deploys to production. Pushes to other branches get their own preview URL.
+- Vercel's **Root Directory is `site`**. For a manual deploy with the CLI, run `vercel deploy --prod` from the repository root, not from `site/`.
+- Search engines are blocked until launch. At launch, add the environment variable `ALLOW_INDEXING=true` in Vercel (Production) and redeploy.
+- Form email: add `RESEND_API_KEY`, `INQUIRY_TO` and `INQUIRY_FROM` in Vercel's environment variables (see "Contact and wholesale forms" above).
+- Custom domain: not connected yet. `downeasticecreamfactory.com` still points to the old WordPress site.
+- Plan: the free Hobby plan is for non-commercial use. Upgrade to Pro (or move hosts) before serving the business's real domain.
