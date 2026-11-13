@@ -91,3 +91,10 @@ export const nav = [
   { href: "/story", label: "Our Story" },
   { href: "/wholesale", label: "Wholesale" },
 ] as const;
+
+/**
+ * Search-engine indexing is OFF unless ALLOW_INDEXING=true is set at build time.
+ * Keeps test/preview deployments (e.g. *.vercel.app) out of Google so they can't
+ * compete with the live site. Set it only on the real domain at launch.
+ */
+export const allowIndexing = process.env.ALLOW_INDEXING === "true";

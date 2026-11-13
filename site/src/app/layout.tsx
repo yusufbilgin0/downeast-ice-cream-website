@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Figtree, Fraunces } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { locations, site } from "@/content/site";
+import { allowIndexing, locations, site } from "@/content/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -18,6 +18,7 @@ const figtree = Figtree({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  robots: allowIndexing ? undefined : { index: false, follow: false },
   title: {
     default: "Super Premium Ice Cream in Boothbay Harbor, Maine | Downeast Ice Cream Factory",
     template: "%s | Downeast Ice Cream Factory",
