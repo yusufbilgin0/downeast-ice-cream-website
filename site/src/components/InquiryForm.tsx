@@ -120,13 +120,13 @@ export function InquiryForm({ kind }: { kind: "contact" | "wholesale" }) {
         {state === "unavailable" && (
           <p className="mb-4 rounded-2xl bg-waffle-soft p-4 text-navy">
             Our online form isn&apos;t connected yet. Please call us at{" "}
-            <a href={site.phone.href} className="font-semibold underline">{site.phone.display}</a>.
+            <a href={site.phone.href} className="whitespace-nowrap font-semibold underline">{site.phone.display}</a>.
           </p>
         )}
         {state === "error" && (
           <p className="mb-4 rounded-2xl bg-strawberry-soft p-4 text-navy">
             Something went wrong sending your message. Please try again or call{" "}
-            <a href={site.phone.href} className="font-semibold underline">{site.phone.display}</a>.
+            <a href={site.phone.href} className="whitespace-nowrap font-semibold underline">{site.phone.display}</a>.
           </p>
         )}
         <button

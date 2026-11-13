@@ -16,7 +16,7 @@ export default function ContactPage() {
       <PageHero eyebrow="Get in touch" title={<>We&apos;d love to hear from you</>}>
         <p>
           Questions, feedback or special requests? Call us at{" "}
-          <a href={site.phone.href} className="font-semibold text-blueberry underline underline-offset-4">
+          <a href={site.phone.href} className="whitespace-nowrap font-semibold text-blueberry underline underline-offset-4">
             {site.phone.display}
           </a>{" "}
           or send a message below. Looking for hours and directions?{" "}

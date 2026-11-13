@@ -7,7 +7,7 @@ import { getShopStatus, type ShopStatus } from "@/lib/status";
  * Live open/closed badge. Computed in the browser so the static page never
  * shows a stale status, and refreshed every minute.
  */
-export function StatusBadge({ tone = "light" }: { tone?: "light" | "dark" }) {
+export function StatusBadge({ tone = "light", compact = false }: { tone?: "light" | "dark"; compact?: boolean }) {
   const [status, setStatus] = useState<ShopStatus | null>(null);
 
   useEffect(() => {
@@ -42,10 +42,20 @@ export function StatusBadge({ tone = "light" }: { tone?: "light" | "dark" }) {
         <span className={`relative inline-flex size-2.5 rounded-full ${status ? dot : "bg-navy/20"}`} />
       </span>
       {status ? (
-        <span>
-          <strong className="font-semibold">{status.label}</strong>
-          <span className="opacity-75"> · {status.detail}</span>
-        </span>
+        compact ? (
+          <>
+            <span className="sm:hidden">{status.short}</span>
+            <span className="hidden sm:inline">
+              <strong className="font-semibold">{status.label}</strong>
+              <span className="opacity-75"> · {status.detail}</span>
+            </span>
+          </>
+        ) : (
+          <span>
+            <strong className="font-semibold">{status.label}</strong>
+            <span className="opacity-75"> · {status.detail}</span>
+          </span>
+        )
       ) : (
         <span className="opacity-60">Checking today&apos;s hours…</span>
       )}

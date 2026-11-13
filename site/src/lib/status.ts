@@ -1,9 +1,14 @@
 import { season } from "@/content/site";
 
-export type ShopStatus =
-  | { kind: "open"; label: string; detail: string }
-  | { kind: "closed-today"; label: string; detail: string }
-  | { kind: "off-season"; label: string; detail: string };
+export type ShopStatus = {
+  kind: "open" | "closed-today" | "off-season";
+  label: string;
+  detail: string;
+  /** One-line version for small screens. */
+  short: string;
+};
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /** Wall-clock parts for the shops' time zone, regardless of the visitor's. */
 function harborTime(now: Date) {
@@ -33,19 +38,26 @@ export function getShopStatus(now = new Date()): ShopStatus {
       detail: upcoming
         ? `Back for the ${season.year} season · ${season.label}`
         : `See you next season`,
+      short: upcoming ? `Closed for winter · Back ${MONTHS[season.openMonth - 1]} ${season.year}` : "Closed for the season",
     };
   }
 
   if (!season.hoursConfirmed) {
-    return { kind: "open", label: "Open for the season", detail: season.hoursLabel };
+    return { kind: "open", label: "Open for the season", detail: season.hoursLabel, short: `Open · ${season.hoursLabel}` };
   }
 
   if (hour >= season.dailyOpenHour && hour < season.dailyCloseHour) {
-    return { kind: "open", label: "Open now", detail: `Until ${fmtHour(season.dailyCloseHour)} today` };
+    return {
+      kind: "open",
+      label: "Open now",
+      detail: `Until ${fmtHour(season.dailyCloseHour)} today`,
+      short: `Open now · until ${fmtHour(season.dailyCloseHour)}`,
+    };
   }
   return {
     kind: "closed-today",
     label: "Closed right now",
     detail: `Opens at ${fmtHour(season.dailyOpenHour)}`,
+    short: `Closed now · opens ${fmtHour(season.dailyOpenHour)}`,
   };
 }

@@ -55,7 +55,11 @@ export function StackYourCone() {
         decided = true;
         if (!canUse3D()) return;
         if (isDesktopPointer()) setMode((m) => (m === "2d" ? "loading" : m));
-        else setOffer3D(true);
+        else {
+          setOffer3D(true);
+          // Pre-download (not run) the 3D code so "View in 3D" responds quickly.
+          window.setTimeout(() => void import("../three/ConeScene"), 1500);
+        }
       },
       { rootMargin: "300px" },
     );
@@ -84,9 +88,9 @@ export function StackYourCone() {
 
   return (
     <section className="px-4 pb-16 sm:px-6" aria-labelledby="stack-title">
-      <div className="mx-auto grid max-w-6xl items-center gap-8 overflow-hidden rounded-[var(--radius-scoop)] bg-paper p-6 ring-1 ring-navy/5 sm:p-10 lg:grid-cols-[1fr_1.15fr]">
+      <div className="mx-auto grid max-w-6xl items-center gap-x-8 overflow-hidden rounded-[var(--radius-scoop)] bg-paper p-5 ring-1 ring-navy/5 [grid-template-areas:'head'_'stage'_'pick'] sm:p-10 lg:grid-cols-[1fr_1.15fr] lg:[grid-template-areas:'stage_head'_'stage_pick']">
         {/* Stage */}
-        <div ref={stage} className="relative mx-auto w-full max-w-[17rem] sm:max-w-none" data-stack-mode={mode}>
+        <div ref={stage} className="relative mx-auto mt-2 w-full max-w-[14rem] [grid-area:stage] sm:max-w-[20rem] lg:mt-0 lg:max-w-none lg:self-center" data-stack-mode={mode}>
           <div aria-hidden className="absolute inset-[8%] rounded-full bg-[radial-gradient(closest-side,var(--color-blueberry-soft),transparent)]" />
           <div className={`transition-opacity duration-500 ${live ? "pointer-events-none absolute inset-0 opacity-0" : "relative opacity-100"}`}>
             <Cone2D top={chosen.top} middle={chosen.middle} bottom={chosen.bottom} />
@@ -96,6 +100,7 @@ export function StackYourCone() {
               <ConeScene
                 active={inView && tabVisible}
                 detail={isDesktopPointer() ? "high" : "low"}
+                touch={!isDesktopPointer()}
                 looks={looks}
                 onReady={() => setMode("live")}
                 onContextLost={() => setMode("2d")}
@@ -105,25 +110,37 @@ export function StackYourCone() {
           {offer3D && !live && (
             <button
               type="button"
-              onClick={() => setMode("loading")}
-              disabled={mode === "loading"}
-              className="absolute bottom-2 left-1/2 inline-flex min-h-11 -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-paper/90 px-4 text-sm font-semibold text-navy shadow-md ring-1 ring-navy/10 backdrop-blur disabled:opacity-70"
+              onClick={() => setMode((m) => (m === "2d" ? "loading" : m))}
+              aria-busy={mode === "loading"}
+              className="absolute bottom-2 left-1/2 inline-flex min-h-11 -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-navy py-1.5 pl-1.5 pr-4 text-sm font-semibold text-cream shadow-lg shadow-navy/20 transition-transform active:scale-95"
             >
-              {mode === "loading" ? "Loading 3D…" : "View in 3D"}
+              <span className="grid size-8 place-items-center rounded-full bg-cream/15 text-[0.7rem] font-black tracking-wide">
+                {mode === "loading" ? (
+                  <svg viewBox="0 0 24 24" className="size-4 animate-spin" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
+                    <path d="M21 12a9 9 0 1 1-9-9" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  "3D"
+                )}
+              </span>
+              {mode === "loading" ? "Getting it ready…" : "View in 3D"}
             </button>
           )}
           {live && <p className="mt-2 text-center text-sm text-ink-muted">Drag to spin</p>}
         </div>
 
-        {/* Controls */}
-        <div>
+        {/* Heading */}
+        <div className="[grid-area:head] lg:self-end">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-blueberry">Build a triple</p>
-          <h2 id="stack-title" className="font-display mt-3 text-4xl font-black leading-[0.95] text-navy sm:text-5xl">
+          <h2 id="stack-title" className="font-display mt-2 text-[2rem] font-black leading-[0.95] text-navy sm:mt-3 sm:text-5xl">
             Stack your cone
           </h2>
-          <p className="mt-3 text-ink-muted">Pick a scoop, then a flavor. Mix and match any of our ice creams.</p>
+          <p className="mt-2 text-[0.95rem] text-ink-muted sm:mt-3 sm:text-base">Pick a scoop, then a flavor. Mix and match any of our ice creams.</p>
+        </div>
 
-          <div role="group" aria-label="Choose which scoop to change" className="mt-6 grid grid-cols-3 gap-2">
+        {/* Picker */}
+        <div className="min-w-0 [grid-area:pick] lg:self-start">
+          <div role="group" aria-label="Choose which scoop to change" className="mt-4 grid grid-cols-3 gap-2 sm:mt-6">
             {SLOTS.map((s) => {
               const f = chosen[s.id];
               const on = active === s.id;
@@ -146,7 +163,7 @@ export function StackYourCone() {
             })}
           </div>
 
-          <div className="mt-5 flex items-center justify-between gap-3">
+          <div className="mt-4 flex items-center justify-between gap-3 sm:mt-5">
             <p className="text-sm font-semibold text-navy">
               Choosing the <span className="text-blueberry">{active}</span> scoop
             </p>
@@ -161,22 +178,22 @@ export function StackYourCone() {
 
           <ul
             aria-label={`Flavors for the ${active} scoop`}
-            className="mt-3 grid max-h-64 grid-cols-2 gap-2 overflow-y-auto rounded-2xl bg-cream p-2 sm:grid-cols-3"
+            className="no-scrollbar -mx-5 mt-3 grid auto-cols-[9.25rem] grid-flow-col grid-rows-[3.25rem_3.25rem] gap-2 overflow-x-auto px-5 pb-1 [scroll-padding-inline:1.25rem] snap-x snap-mandatory sm:mx-0 sm:max-h-64 sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-3 sm:grid-rows-none sm:overflow-y-auto sm:overflow-x-hidden sm:rounded-2xl sm:bg-cream sm:p-2"
           >
             {iceCreams.map((f) => {
               const current = picks[active] === f.name;
               return (
-                <li key={f.name}>
+                <li key={f.name} className="snap-start">
                   <button
                     type="button"
                     aria-pressed={current}
                     onClick={() => pick(f)}
-                    className={`flex min-h-12 w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-sm font-semibold transition-colors ${
-                      current ? "bg-navy text-cream" : "bg-paper text-navy hover:bg-white"
+                    className={`flex h-full min-h-12 w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-[0.8rem] font-semibold transition-colors sm:text-sm ${
+                      current ? "bg-navy text-cream" : "bg-cream text-navy hover:bg-white sm:bg-paper"
                     }`}
                   >
                     <Scoop base={f.base} fleck={f.fleck} seed={f.name} className="w-9 shrink-0" />
-                    <span className="leading-tight">{f.name}</span>
+                    <span className="line-clamp-2 leading-tight">{f.name}</span>
                   </button>
                 </li>
               );

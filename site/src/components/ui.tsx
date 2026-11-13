@@ -58,13 +58,13 @@ export function PageHero({
   bg?: string;
 }) {
   return (
-    <section className={`${bg} px-4 pb-14 pt-32 sm:px-6 sm:pt-40`}>
+    <section className={`${bg} px-4 pb-10 pt-28 sm:px-6 sm:pb-14 sm:pt-40`}>
       <div className="mx-auto max-w-6xl">
         <Eyebrow>{eyebrow}</Eyebrow>
-        <h1 className="font-display mt-4 max-w-3xl text-5xl font-black leading-[0.95] text-navy sm:text-7xl">
+        <h1 className="font-display mt-3 max-w-3xl text-[clamp(2.4rem,10.5vw,4.5rem)] font-black leading-[0.95] tracking-tight text-navy sm:mt-4 sm:text-7xl">
           {title}
         </h1>
-        {children && <div className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">{children}</div>}
+        {children && <div className="mt-4 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-muted sm:mt-6 sm:text-lg">{children}</div>}
       </div>
     </section>
   );

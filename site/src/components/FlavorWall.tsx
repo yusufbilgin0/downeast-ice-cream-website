@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { families, iceCreams, type Family } from "@/content/flavors";
 import { Scoop } from "./Scoop";
@@ -8,7 +8,6 @@ import { Scoop } from "./Scoop";
 type Filter = Family | "all" | "maine";
 
 export function FlavorWall() {
-  const reduce = useReducedMotion();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
   const q = useDeferredValue(query.trim().toLowerCase());
@@ -32,8 +31,8 @@ export function FlavorWall() {
 
   return (
     <div>
-      <div className="sticky top-18 z-30 -mx-4 bg-cream/90 px-4 py-4 backdrop-blur-md sm:-mx-6 sm:px-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+      <div className="sticky top-18 z-30 -mx-4 bg-cream/90 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 sm:py-4">
+        <div className="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center">
           <label className="relative block lg:w-72">
             <span className="sr-only">Search flavors</span>
             <svg viewBox="0 0 24 24" className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-ink-muted" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
@@ -67,34 +66,34 @@ export function FlavorWall() {
             })}
           </div>
         </div>
-        <p className="mt-3 text-sm text-ink-muted" aria-live="polite">
+        <p className="mt-2 text-xs text-ink-muted sm:mt-3 sm:text-sm" aria-live="polite">
           Showing {shown.length} of {iceCreams.length} ice cream flavors
         </p>
       </div>
 
-      <motion.ul layout={!reduce} className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
+      <motion.ul layout className="mt-4 grid gap-2.5 sm:mt-6 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
         <AnimatePresence mode="popLayout" initial={false}>
           {shown.map((f) => (
             <motion.li
               key={f.name}
               id={encodeURIComponent(f.name)}
-              layout={!reduce}
-              initial={reduce ? false : { opacity: 0, scale: 0.85 }}
+              layout
+              initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85, y: 20 }}
+              exit={{ opacity: 0, scale: 0.85, y: 20 }}
               transition={{ type: "spring", stiffness: 260, damping: 24 }}
-              className="group scroll-mt-48 rounded-[var(--radius-scoop)] bg-paper p-5 ring-1 ring-navy/5 transition-shadow hover:shadow-[0_18px_40px_-18px_rgba(19,33,58,.35)] target:ring-4 target:ring-strawberry"
+              className="group grid scroll-mt-48 grid-cols-[4rem_1fr] items-center gap-x-4 rounded-2xl bg-paper p-3 pr-4 ring-1 ring-navy/5 transition-shadow hover:shadow-[0_18px_40px_-18px_rgba(19,33,58,.35)] target:ring-4 target:ring-strawberry sm:block sm:rounded-[var(--radius-scoop)] sm:p-5"
             >
               <Scoop
                 base={f.base}
                 fleck={f.fleck}
                 seed={f.name}
-                className="mx-auto w-full max-w-32 transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105"
+                className="row-span-2 w-16 transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 sm:mx-auto sm:w-full sm:max-w-32"
               />
-              <h3 className="font-display mt-4 text-xl font-bold leading-tight text-navy">{f.name}</h3>
-              <p className="mt-1.5 text-sm leading-snug text-ink-muted">{f.description}</p>
+              <h3 className="font-display text-lg font-bold leading-tight text-navy sm:mt-4 sm:text-xl">{f.name}</h3>
+              <p className="mt-0.5 text-sm leading-snug text-ink-muted sm:mt-1.5">{f.description}</p>
               {f.maineMade && (
-                <p className="mt-3 inline-block rounded-full bg-blueberry-soft px-2.5 py-0.5 text-xs font-bold text-blueberry">
+                <p className="col-start-2 mt-2 justify-self-start rounded-full bg-blueberry-soft px-2.5 py-0.5 text-xs font-bold text-blueberry sm:mt-3 sm:inline-block">
                   Taste of Maine
                 </p>
               )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import type { Flavor } from "@/content/flavors";
 import { Scoop } from "../Scoop";
 
@@ -9,7 +9,6 @@ import { Scoop } from "../Scoop";
  * the visitor opts into 3D, for reduced motion, and wherever WebGL isn't available.
  */
 export function Cone2D({ top, middle, bottom }: { top: Flavor; middle: Flavor; bottom: Flavor }) {
-  const reduce = useReducedMotion();
   const layers = [
     { slot: "bottom", f: bottom, y: "31%", z: 3 },
     { slot: "middle", f: middle, y: "16%", z: 2 },
@@ -40,10 +39,10 @@ export function Cone2D({ top, middle, bottom }: { top: Flavor; middle: Flavor; b
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={f.name}
-              initial={reduce ? { opacity: 0 } : { y: -70, scaleX: 0.9, scaleY: 1.12, opacity: 0 }}
+              initial={{ y: -70, scaleX: 0.9, scaleY: 1.12, opacity: 0 }}
               animate={{ y: 0, scaleX: 1, scaleY: 1, opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.12 } }}
-              transition={reduce ? { duration: 0.15 } : { type: "spring", stiffness: 420, damping: 14 }}
+              transition={{ type: "spring", stiffness: 420, damping: 14 }}
               style={{ transformOrigin: "50% 100%" }}
             >
               <Scoop base={f.base} fleck={f.fleck} seed={f.name} className="w-full drop-shadow-[0_6px_6px_rgba(19,33,58,.15)]" />

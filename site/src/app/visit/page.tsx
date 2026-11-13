@@ -35,10 +35,10 @@ export default function VisitPage() {
   return (
     <>
       <PageHero eyebrow="Come & visit us" title={<>Two sweet spots in Boothbay Harbor</>}>
-        <StatusBadge />
+        <StatusBadge compact />
         <p className="mt-5">
           {season.label} {season.year} · {season.hoursLabel} at both shops. Questions? Call us at{" "}
-          <a href={site.phone.href} className="font-semibold text-blueberry underline underline-offset-4">
+          <a href={site.phone.href} className="whitespace-nowrap font-semibold text-blueberry underline underline-offset-4">
             {site.phone.display}
           </a>
           .
@@ -50,7 +50,7 @@ export default function VisitPage() {
           {locations.map((loc, i) => (
             <Reveal key={loc.id}>
               <div className={`grid items-stretch gap-6 lg:grid-cols-2 ${i % 2 ? "lg:[&>*:first-child]:order-2" : ""}`}>
-                <LocationCard loc={loc} headingLevel="h2" />
+                <LocationCard loc={loc} headingLevel="h2" full />
                 <div className="min-h-80 overflow-hidden rounded-[var(--radius-scoop)] bg-cream-deep ring-1 ring-navy/10">
                   <iframe
                     title={`Map of ${loc.name}, ${loc.street}, ${loc.city}`}

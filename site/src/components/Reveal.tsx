@@ -1,29 +1,24 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
-/** Fades and lifts content in as it scrolls into view. Respects reduced motion. */
+/**
+ * Fades and lifts content in as it scrolls into view, using CSS scroll-driven
+ * animations (see `.reveal` in globals.css). No JavaScript, so content is never
+ * stuck hidden: browsers without support, and visitors who prefer reduced
+ * motion, simply see it immediately.
+ */
 export function Reveal({
   children,
   delay = 0,
-  className,
+  className = "",
 }: {
   children: ReactNode;
+  /** Small stagger (seconds), applied as a later start within the reveal range. */
   delay?: number;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <div className={`reveal ${className}`} style={delay ? ({ "--reveal-shift": `${Math.round(delay * 100)}%` } as React.CSSProperties) : undefined}>
       {children}
-    </motion.div>
+    </div>
   );
 }

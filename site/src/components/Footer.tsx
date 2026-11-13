@@ -8,9 +8,9 @@ export function Footer() {
   return (
     <footer className="mt-auto">
       <Wave fill="#13213a" className="bg-transparent" />
-      <div className="bg-navy px-4 pb-10 pt-8 text-cream sm:px-6">
-        <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
-          <div>
+      <div className="bg-navy px-4 pb-28 pt-8 text-cream sm:px-6 md:pb-10">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12">
+          <div className="col-span-2 grid grid-cols-[6.5rem_1fr] items-center gap-x-5 md:col-span-1 md:block">
             <Link href="/" className="inline-block transition-transform duration-300 hover:-rotate-3">
               <Image
                 src="/brand/downeast-badge.svg"
@@ -18,21 +18,21 @@ export function Footer() {
                 width={1000}
                 height={1000}
                 unoptimized
-                className="h-40 w-40"
+                className="h-26 w-26 md:h-40 md:w-40"
               />
             </Link>
-            <p className="mt-5 max-w-xs text-cream/75">
+            <p className="max-w-xs text-sm text-cream/75 md:mt-5 md:text-base">
               Super premium ice cream, handcrafted in small batches in {site.town} since {site.founded}.
             </p>
-            <div className="mt-5">
-              <StatusBadge tone="dark" />
+            <div className="col-span-2 mt-5">
+              <StatusBadge tone="dark" compact />
             </div>
           </div>
 
           {locations.map((loc) => (
             <div key={loc.id}>
-              <h2 className="font-display text-xl font-bold">{loc.name}</h2>
-              <address className="mt-3 not-italic leading-relaxed text-cream/80">
+              <h2 className="font-display text-lg font-bold md:text-xl">{loc.name}</h2>
+              <address className="mt-2 text-sm not-italic leading-relaxed text-cream/80 md:mt-3 md:text-base">
                 {loc.street}
                 <br />
                 {loc.city}, {loc.region} {loc.postalCode}
@@ -41,14 +41,14 @@ export function Footer() {
                 href={directionsUrl(loc)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-block font-semibold text-mint underline-offset-4 hover:underline"
+                className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-mint underline-offset-4 hover:underline md:mt-3 md:min-h-0 md:text-base"
               >
                 Get directions<span className="sr-only"> to {loc.name} (opens Google Maps)</span> →
               </a>
             </div>
           ))}
 
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <h2 className="font-display text-xl font-bold">Hours</h2>
             <p className="mt-3 text-cream/80">
               {season.label} {season.year}

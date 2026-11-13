@@ -26,6 +26,8 @@ export type ConeSceneProps = {
   still?: boolean;
   /** Flavor look per scoop (defaults to blueberry / strawberry / vanilla). */
   looks?: Looks;
+  /** Phone mode: slow turntable + drag to spin, no pointer tilt. */
+  touch?: boolean;
 };
 
 /**
@@ -33,7 +35,7 @@ export type ConeSceneProps = {
  * never blocks the first paint. Everything is procedural: no model or
  * texture downloads.
  */
-export default function ConeScene({ active, detail, onReady, onContextLost, still = false, looks }: ConeSceneProps) {
+export default function ConeScene({ active, detail, onReady, onContextLost, still = false, looks, touch = false }: ConeSceneProps) {
   return (
     <Canvas
       frameloop={active ? "always" : "never"}
@@ -55,13 +57,13 @@ export default function ConeScene({ active, detail, onReady, onContextLost, stil
       <directionalLight position={[-4, 7, 5]} intensity={1.7} color="#fff1df" />
       <directionalLight position={[5, 3, -6]} intensity={1.6} color="#bcd2ff" />
       <directionalLight position={[6, 1, 4]} intensity={0.35} color="#ffe6c8" />
-      <Environment resolution={detail === "low" ? 128 : 256} frames={1}>
+      <Environment resolution={detail === "low" ? 64 : 256} frames={1}>
         <Lightformer form="rect" intensity={2.4} color="#fff4e6" position={[-5, 5, 5]} scale={[7, 5, 1]} target={[0, 0, 0]} />
         <Lightformer form="rect" intensity={3.2} color="#a9c3f0" position={[5, 1.5, -5]} scale={[2, 9, 1]} target={[0, 0, 0]} />
         <Lightformer form="circle" intensity={1.4} color="#ffffff" position={[0, 8, 1]} scale={4} target={[0, 0, 0]} />
         <Lightformer form="rect" intensity={0.6} color="#ffe2c2" position={[6, 0, 4]} scale={[4, 4, 1]} target={[0, 0, 0]} />
       </Environment>
-      <HarborCone detail={detail} onReady={onReady} still={still} looks={looks} />
+      <HarborCone detail={detail} onReady={onReady} still={still} looks={looks} touch={touch} />
     </Canvas>
   );
 }

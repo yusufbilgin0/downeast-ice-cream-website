@@ -23,6 +23,8 @@ export type HarborConeProps = {
   detail?: 'high' | 'low';
   /** Called once the meshes have been drawn for the first time. */
   onReady?: () => void;
+  /** Phone mode: slow turntable rotation and drag-to-spin; no pointer tilt (it twitches while scrolling). */
+  touch?: boolean;
 };
 
 export type Slot = 'top' | 'middle' | 'bottom';
@@ -30,6 +32,7 @@ export type Looks = Record<Slot, Flavor>;
 const SLOTS: Slot[] = ['bottom', 'middle', 'top'];
 const DEFAULT_LOOKS: Looks = { top: FLAVORS.blueberry, middle: FLAVORS.strawberry, bottom: FLAVORS.vanilla };
 const SWAP_MS = 520;
+const TURNTABLE = (Math.PI * 2) / 26; // one turn every 26 s (phones)
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
 const DEG = Math.PI / 180;
@@ -43,6 +46,7 @@ export function HarborCone({
   tilt = 8,
   detail = 'high',
   onReady,
+  touch = false,
 }: HarborConeProps) {
   const lo = detail === 'low';
   const geo = useMemo(
@@ -98,6 +102,7 @@ export function HarborCone({
   // Pointer / touch target, tracked on the window so the tilt works anywhere on the page.
   const target = useRef({ x: 0, y: 0, last: 0 });
   useEffect(() => {
+    if (touch) return;
     const set = (cx: number, cy: number) => {
       target.current.x = THREE.MathUtils.clamp((cx / window.innerWidth) * 2 - 1, -1, 1);
       target.current.y = THREE.MathUtils.clamp(-((cy / window.innerHeight) * 2 - 1), -1, 1);
@@ -118,11 +123,12 @@ export function HarborCone({
       window.removeEventListener('touchstart', onTouch);
       window.removeEventListener('touchmove', onTouch);
     };
-  }, []);
+  }, [touch]);
 
   // Drag horizontally on the cone to spin it; it coasts to a stop (inertia).
   const dom = useThree((st) => st.gl.domElement);
-  const spin = useRef({ angle: 0, vel: 0, dragging: false, lastX: 0, lastT: 0 });
+  // Phones get a short spin-in when the 3D appears, so it reads as "alive".
+  const spin = useRef({ angle: 0, vel: touch ? 5 : 0, dragging: false, lastX: 0, lastT: 0 });
   useEffect(() => {
     const sp = spin.current;
     const down = (e: PointerEvent) => {
@@ -231,6 +237,7 @@ export function HarborCone({
     g.position.y = Math.sin(ph) * 0.08;
     const sp = spin.current;
     if (!sp.dragging) {
+      if (touch && !reduceMotion) sp.angle += Math.min(dt, 0.1) * TURNTABLE; // slow showroom turn
       sp.angle += sp.vel * Math.min(dt, 0.1);
       sp.vel *= Math.exp(-Math.min(dt, 0.1) * 2.5);
       sp.vel = THREE.MathUtils.clamp(sp.vel, -12, 12);
