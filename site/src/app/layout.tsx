@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MotionProvider } from "@/components/MotionProvider";
 import { MobileActionBar } from "@/components/MobileActionBar";
-import { allowIndexing, locations, site } from "@/content/site";
+import { allowIndexing, locations, reviewSites, site } from "@/content/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -51,7 +51,7 @@ const jsonLd = {
       foundingDate: String(site.founded),
       logo: `${site.url}/brand/downeast-badge-1200.png`,
       telephone: "+1-207-315-6670",
-      sameAs: [site.social.facebook, site.social.instagram],
+      sameAs: [site.social.facebook, site.social.instagram, ...reviewSites.filter((r) => r.id !== "google").map((r) => r.href)],
     },
     ...locations.map((loc) => ({
       "@type": "IceCreamShop",

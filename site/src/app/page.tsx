@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { AirVsCream } from "@/components/home/AirVsCream";
+import { Reviews } from "@/components/home/Reviews";
 import { LocationCard } from "@/components/LocationCard";
 import { Reveal } from "@/components/Reveal";
 import { Scoop } from "@/components/Scoop";
@@ -169,6 +170,8 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
+
+      <Reviews />
 
       {/* Closing */}
       <section className="px-4 pb-16 text-center sm:px-6 sm:pb-24">

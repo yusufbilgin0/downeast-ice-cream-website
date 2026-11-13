@@ -19,6 +19,31 @@ export const site = {
     "Super premium, old-fashioned hard ice cream handcrafted in small batches in Boothbay Harbor, Maine since 1979. 65+ homemade flavors at two shops: on Pier 1 and at the Meadow Mall Factory Shop.",
 } as const;
 
+/**
+ * Where people review us. Links only: we never copy, write or paraphrase reviews.
+ * (Live ratings/reviews could later come from the Google Places API.)
+ */
+export const reviewSites = [
+  {
+    id: "google",
+    name: "Google",
+    cta: "Read reviews on Google Maps",
+    href: "https://www.google.com/maps/place/Downeast+Ice+Cream+Factory/data=!4m2!3m1!1s0x0:0x9ac0be042916944e",
+  },
+  {
+    id: "tripadvisor",
+    name: "Tripadvisor",
+    cta: "Read reviews on Tripadvisor",
+    href: "https://www.tripadvisor.com/Restaurant_Review-g40525-d830773-Reviews-Downeast_Ice_Cream_Factory-Boothbay_Harbor_Maine.html",
+  },
+  {
+    id: "yelp",
+    name: "Yelp",
+    cta: "Read reviews on Yelp",
+    href: "https://www.yelp.com/biz/downeast-ice-cream-factory-boothbay-harbor",
+  },
+] as const;
+
 export type Location = {
   id: "pier" | "factory";
   name: string;
