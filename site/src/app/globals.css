@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/*
+  "Harbor Scoop" design tokens.
+  Navy anchors text and trust, cream is the canvas, and three flavor accents
+  (blueberry, strawberry, mint) carry the energy. Buoy red is reserved for
+  status and primary calls to action.
+*/
+@theme {
+  --color-navy: #13213a;
+  --color-navy-soft: #24375a;
+  --color-cream: #fbf5ea;
+  --color-cream-deep: #f3e7d2;
+  --color-paper: #fffdf8;
+  --color-blueberry: #5a3e8e;
+  --color-blueberry-soft: #ebe3f6;
+  --color-strawberry: #e47f97;
+  --color-strawberry-soft: #fce4ea;
+  --color-mint: #8fd3b6;
+  --color-mint-soft: #e1f4eb;
+  --color-waffle: #c98a45;
+  --color-waffle-soft: #f6e6cf;
+  --color-buoy: #c2352a;
+  --color-ink-muted: #4e5a70;
+
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-scoop: 2.25rem;
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-14px) rotate(1.5deg); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display type: Fraunces with its soft, slightly "wonky" vintage-parlor axes. */
+.font-display {
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: var(--color-strawberry);
+  color: var(--color-navy);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-blueberry);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
