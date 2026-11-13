@@ -1,6 +1,7 @@
 import { reviewSites } from "@/content/site";
 import { Reveal } from "../Reveal";
 import { Eyebrow } from "../ui";
+import { GoogleReviews } from "./GoogleReviews";
 
 const accent: Record<(typeof reviewSites)[number]["id"], string> = {
   google: "bg-blueberry-soft text-blueberry",
@@ -15,7 +16,7 @@ const accent: Record<(typeof reviewSites)[number]["id"], string> = {
 export function Reviews() {
   return (
     <section className="px-4 pb-14 sm:px-6 sm:pb-24" aria-labelledby="reviews-title">
-      <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">
         <Reveal>
           <Eyebrow>Reviews</Eyebrow>
           <h2 id="reviews-title" className="font-display mt-3 text-[2.25rem] font-black leading-[0.95] text-navy sm:text-6xl">
@@ -63,6 +64,8 @@ export function Reviews() {
             ))}
           </ul>
         </Reveal>
+
+        <GoogleReviews />
       </div>
     </section>
   );

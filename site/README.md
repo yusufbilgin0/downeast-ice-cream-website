@@ -115,3 +115,32 @@ Earlier art-direction work: a private Spline file (link in `previews/NOTES.md`) 
 - Form email: add `RESEND_API_KEY`, `INQUIRY_TO` and `INQUIRY_FROM` in Vercel's environment variables (see "Contact and wholesale forms" above).
 - Custom domain: not connected yet. `downeasticecreamfactory.com` still points to the old WordPress site.
 - Plan: the free Hobby plan is for non-commercial use. Upgrade to Pro (or move hosts) before serving the business's real domain.
+
+## Live Google reviews
+
+The homepage's Reviews section always links to Google, Tripadvisor and Yelp. When a Google API key is set, it also shows the live Google rating, review count and up to 5 reviews (Google chooses and orders them).
+
+How it works: `src/app/api/reviews/route.ts` calls the Places API (New) on the server, so the key never reaches the browser. `src/components/home/GoogleReviews.tsx` requests it only when a visitor scrolls near the section. If the key is missing, the quota is used up or Google errors, nothing extra shows and the links remain.
+
+Google's rules (followed in the code): reviews are never cached or stored, every review credits its author and links to Google Maps, "Google Maps" attribution is shown, and the page explains how reviews are ordered.
+
+### One-time setup (owner)
+
+1. Go to https://console.cloud.google.com and create a project (e.g. "Downeast website"). Google requires a billing account. See cost below.
+2. **APIs & Services → Library**: enable **Places API (New)**.
+3. **APIs & Services → Credentials → Create credentials → API key.** Edit the key: under *API restrictions* choose **Restrict key → Places API (New)**. Leave *Application restrictions* as None (the key is only used from the server).
+4. **Cap usage, so it stays free:** in **Google Maps Platform → Quotas** (or **IAM & Admin → Quotas**, filtered to *Places API (New)*), set the per-day limit for Place Details (*GetPlace*) requests to **30**. Also add a **Billing → Budgets & alerts** budget (e.g. $5) so you're emailed if anything is charged.
+5. In **Vercel → downeast-ice-cream-website → Settings → Environment Variables**, add `GOOGLE_PLACES_API_KEY` = your key (Production), then **Redeploy**.
+6. Optional: if the wrong Google listing appears, also add `GOOGLE_PLACE_ID` (find it with Google's Place ID Finder).
+
+Never paste the key into chat, email or the code. It lives only in Vercel's settings.
+
+### Cost (as of November 2026, from Google's pricing page)
+
+- Each page view that reaches the reviews section = 1 "Place Details Enterprise + Atmosphere" call. **1,000 free per month**, then $25 per 1,000.
+- Finding the place ID uses "Text Search Essentials (IDs Only)", which is free and unlimited.
+- With the 30-per-day cap, usage stays under the free 1,000/month. On busy days, visitors past the cap simply see the review links.
+
+### Local layout testing
+
+`REVIEWS_MOCK_FILE=/path/to/sample.json npm start` serves a sample file instead of calling Google (ignored on Vercel). Only use obviously fake placeholder content.

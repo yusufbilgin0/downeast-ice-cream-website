@@ -121,6 +121,8 @@ h1, h2, h3 { text-wrap: balance; }
   }
 }
 
-/* Horizontal swipe rails: scroll without a visible scrollbar. */
-.no-scrollbar { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+/* Horizontal swipe rails: scroll without a visible scrollbar. `position: relative`
+   keeps absolutely positioned children (e.g. screen-reader-only labels) inside the
+   rail; otherwise they poke out past the screen edge and phones zoom the page out. */
+.no-scrollbar { position: relative; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
